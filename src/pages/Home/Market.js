@@ -1,15 +1,16 @@
-import React from 'react';
-import { FlatList, View, Text } from 'react-native';
+import React, { useState } from 'react';
+import { FlatList, TouchableOpacity, Text } from 'react-native';
 import { useSafeArea } from 'react-native-safe-area-context';
 import _ from 'lodash';
+import { useIsFocused } from '@react-navigation/native';
 
 import Product from '../../components/Product';
-import { TouchableOpacity } from 'react-native';
 
 const products = require('../../../assets/products.json');
 
 const Market = ({ navigation }) => {
   const { top: paddingTop, bottom: paddingBottom } = useSafeArea();
+  const focused = useIsFocused();
 
   const sections = products.reduce((arr, product) => {
     const pIndex = arr.findIndex((p) => p.title === product.category);
@@ -19,16 +20,9 @@ const Market = ({ navigation }) => {
     return arr;
   }, []);
 
-  const renderProduct = ({ item: product }) => {
-    const viewProductDetail = () =>
-      navigation.navigate('ProductDetail', { product });
-    return (
-      <TouchableOpacity onPress={viewProductDetail}>
-        <Product {...{ product }} />
-      </TouchableOpacity>
-    );
-  };
-
+  const renderProduct = ({ item: product }) => (
+    <Product {...{ product, focused }} />
+  );
   const renderSection = ({ item: sectionData }) => (
     <>
       <Text

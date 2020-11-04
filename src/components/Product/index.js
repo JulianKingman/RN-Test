@@ -1,20 +1,21 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Text,
   View,
   StyleSheet,
   Image,
   Dimensions,
-  TouchableOpacity,
+  TouchableWithoutFeedback,
 } from 'react-native';
 import color from 'color';
 import Animated from 'react-native-reanimated';
 
 import { formatPrice } from '../../utility';
 import { SharedElement } from 'react-navigation-shared-element';
+import { useNavigation } from '@react-navigation/native';
 const products = require('../../../assets/products.json');
 
-const Product = ({ product }) => {
+const Product = ({ product, focused }) => {
   const {
     id,
     image,
@@ -25,55 +26,71 @@ const Product = ({ product }) => {
     discount_type,
   } = product;
   const productWidth = Dimensions.get('window').width * 0.618;
+  const navigation = useNavigation();
+  const [opacity, setOpacity] = useState(1);
+
+  useEffect(() => {
+    if (focused)
+      setTimeout(() => {
+        setOpacity(1);
+      }, 500);
+  }, [focused]);
+
+  const viewProductDetail = () => {
+    setOpacity(0);
+    navigation.navigate('ProductDetail', { product });
+  };
 
   return (
-    <View
-      style={[
-        styles.card,
-        { width: productWidth, height: productWidth * (3 / 4) },
-      ]}>
-      <SharedElement id={`${id}-image`}>
-        <Image
-          source={{ uri: image }}
-          defaultSource={require('../../../assets/placeholder.png')}
-          style={styles.image}
-          resizeMode="cover"
-        />
-      </SharedElement>
-      <View style={styles.infoBar}>
-        <View style={{ flex: 1 }}>
-          <Text numberOfLines={1} style={{ color: 'white' }}>
-            {name}
-          </Text>
-          <View style={{ flexDirection: 'row' }}>
-            <Text
-              style={{
-                color: 'white',
-                textDecorationLine: discount_type ? 'line-through' : 'none',
-              }}>
-              {formatPrice(price)}
+    <TouchableWithoutFeedback onPress={viewProductDetail}>
+      <View
+        style={[
+          styles.card,
+          { width: productWidth, height: productWidth * (3 / 4), opacity },
+        ]}>
+        <SharedElement id={`${id}-image`}>
+          <Image
+            source={{ uri: image }}
+            defaultSource={require('../../../assets/placeholder.png')}
+            style={styles.image}
+            resizeMode="cover"
+          />
+        </SharedElement>
+        <View style={styles.infoBar}>
+          <View style={{ flex: 1 }}>
+            <Text numberOfLines={1} style={{ color: 'white' }}>
+              {name}
             </Text>
-            {discount_type ? (
-              <Text style={{ color: 'white', marginLeft: 6 }}>
-                {formatPrice(
-                  discount_type === 'percentage'
-                    ? (discount * price) / 100
-                    : price - discount,
-                )}
+            <View style={{ flexDirection: 'row' }}>
+              <Text
+                style={{
+                  color: 'white',
+                  textDecorationLine: discount_type ? 'line-through' : 'none',
+                }}>
+                {formatPrice(price)}
               </Text>
-            ) : null}
+              {discount_type ? (
+                <Text style={{ color: 'white', marginLeft: 6 }}>
+                  {formatPrice(
+                    discount_type === 'percentage'
+                      ? (discount * price) / 100
+                      : price - discount,
+                  )}
+                </Text>
+              ) : null}
+            </View>
+            <Text numberOfLines={1} style={{ fontSize: 12, color: '#bdbdbd' }}>
+              {description}
+            </Text>
           </View>
-          <Text numberOfLines={1} style={{ fontSize: 12, color: '#bdbdbd' }}>
-            {description}
-          </Text>
+          <Image
+            defaultSource={require('../../../assets/DefaultAvatar.png')}
+            style={styles.avatar}
+            resizeMode="cover"
+          />
         </View>
-        <Image
-          defaultSource={require('../../../assets/DefaultAvatar.png')}
-          style={styles.avatar}
-          resizeMode="cover"
-        />
       </View>
-    </View>
+    </TouchableWithoutFeedback>
   );
 };
 

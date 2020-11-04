@@ -40,6 +40,23 @@ const ProductDetail = ({
       />
       <View style={{ paddingHorizontal: 12 }}>
         <Text style={{ fontSize: 22, marginBottom: 12 }}>{name}</Text>
+        <View
+          style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            marginBottom: 12,
+          }}>
+          <Image
+            source={require('../../assets/DefaultAvatar.png')}
+            style={{
+              width: 36,
+              height: 36,
+              borderRadius: 36 / 2,
+              marginHorizontal: 12,
+            }}
+          />
+          <Text>by Jane Doe</Text>
+        </View>
         <Text>{description}</Text>
       </View>
     </ScrollView>
