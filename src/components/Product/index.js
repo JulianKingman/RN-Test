@@ -1,6 +1,6 @@
 import React from 'react';
 import { Text } from 'react-native';
-import { View, StyleSheet, Image } from 'react-native';
+import { View, StyleSheet, Image, Dimensions } from 'react-native';
 import color from 'color';
 import { formatPrice } from '../../utility';
 
@@ -9,15 +9,17 @@ const products = require('../../../assets/products.json');
 const Product = ({
   product: { image, name, price, description, discount, discount_type },
 }) => {
+  const productWidth = Dimensions.get('window').width * 0.618;
   return (
-    <View style={styles.card}>
+    <View
+      style={[
+        styles.card,
+        { width: productWidth, height: productWidth * (3 / 4) },
+      ]}>
       <Image
         source={{ uri: image }}
         defaultSource={require('../../../assets/placeholder.png')}
-        style={{
-          width: '100%',
-          height: '100%',
-        }}
+        style={styles.image}
         resizeMode="cover"
       />
       <View
@@ -28,33 +30,45 @@ const Product = ({
           left: 0,
           padding: 12,
           backgroundColor: color('#282828').alpha(0.8).toString(),
+          flexDirection: 'row',
         }}>
-        <Text numberOfLines={1} style={{ color: 'white' }}>
-          {name}
-        </Text>
-        <View style={{ flexDirection: 'row' }}>
-          <Text
-            style={{
-              color: 'white',
-              textDecorationLine: discount_type ? 'line-through' : 'none',
-              marginRight: 6,
-            }}>
-            {formatPrice(price)}
+        <View style={{ flex: 1 }}>
+          <Text numberOfLines={1} style={{ color: 'white' }}>
+            {name}
           </Text>
-          {discount_type ? (
-            <Text style={{ color: 'white' }}>
-              {formatPrice(
-                discount_type === 'percentage'
-                  ? (discount * price) / 100
-                  : price - discount,
-              )}
+          <View style={{ flexDirection: 'row' }}>
+            <Text
+              style={{
+                color: 'white',
+                textDecorationLine: discount_type ? 'line-through' : 'none',
+                marginRight: 6,
+              }}>
+              {formatPrice(price)}
             </Text>
-          ) : null}
+            {discount_type ? (
+              <Text style={{ color: 'white' }}>
+                {formatPrice(
+                  discount_type === 'percentage'
+                    ? (discount * price) / 100
+                    : price - discount,
+                )}
+              </Text>
+            ) : null}
+          </View>
+          <Text numberOfLines={1} style={{ fontSize: 12, color: '#bdbdbd' }}>
+            {description}
+          </Text>
         </View>
-        <Text numberOfLines={1} style={{ fontSize: 12, color: '#bdbdbd' }}>
-          {description}
-        </Text>
-        <Image style={{ position: 'absolute', right: 24, top: 24 }} />
+        <Image
+          defaultSource={require('../../../assets/DefaultAvatar.png')}
+          style={{
+            marginLeft: 12,
+            width: 24,
+            height: 24,
+            borderRadius: 24 / 2,
+          }}
+          resizeMode="cover"
+        />
       </View>
     </View>
   );
@@ -65,12 +79,16 @@ Product.defaultProps = {
 };
 
 const styles = StyleSheet.create({
+  image: {
+    width: '100%',
+    height: '100%',
+  },
   card: {
     width: '100%',
-    aspectRatio: 4 / 3,
+    // aspectRatio: 4 / 3,
     borderRadius: 8,
     overflow: 'hidden',
-    marginBottom: 24,
+    marginRight: 12,
   },
 });
 
