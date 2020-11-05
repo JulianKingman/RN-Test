@@ -4,16 +4,19 @@ import { useSafeArea } from 'react-native-safe-area-context';
 import _ from 'lodash';
 import { useIsFocused } from '@react-navigation/native';
 
-import Product from '../../components/Product';
+import Product from '../components/Product';
+import { ScrollView } from 'react-native';
+import { spacing, textStyles } from '../utility/universalStyles';
+import { createSharedElementStackNavigator } from 'react-navigation-shared-element';
 
-const products = require('../../../assets/products.json');
+const products = require('../../assets/products.json');
 
 const Market = ({ navigation }) => {
   const { top: paddingTop, bottom: paddingBottom } = useSafeArea();
   const focused = useIsFocused();
 
   const sections = products.reduce((arr, product) => {
-    const pIndex = arr.findIndex((p) => p.title === product.category);
+    const pIndex = arr.findIndex(p => p.title === product.category);
     if (pIndex < 0)
       return [...arr, { title: product.category, data: [product] }];
     arr[pIndex].data.push(product);
@@ -27,32 +30,43 @@ const Market = ({ navigation }) => {
     <>
       <Text
         style={{
-          marginLeft: 12,
-          marginTop: 24,
-          marginBottom: 12,
-          fontSize: 22,
+          ...textStyles.title,
+          marginLeft: spacing.md,
         }}>
         {sectionData.title}
       </Text>
       <FlatList
-        contentContainerStyle={{ marginLeft: 12 }}
+        contentContainerStyle={{
+          paddingVertical: spacing.md,
+        }}
+        style={{ overflow: 'visible' }}
         data={_.orderBy(sectionData.data, 'order', 'asc')}
         renderItem={renderProduct}
-        keyExtractor={({ id }) => id}
+        keyExtractor={({ id }) => `product-${id}`}
         horizontal
         showsHorizontalScrollIndicator={false}
       />
     </>
   );
+  console.log('render Market');
 
   return (
     <FlatList
       data={sections}
-      contentContainerStyle={{ paddingTop, paddingBottom: 12 }}
-      keyExtractor={(item) => item.title}
+      style={{ overflow: 'visible' }}
+      contentContainerStyle={{ paddingTop, paddingBottom: spacing.md }}
+      keyExtractor={item => item.title}
       renderItem={renderSection}
     />
   );
 };
 
-export default Market;
+// Workaround related to https://github.com/IjzerenHein/react-navigation-shared-element/issues/77
+const MarketStack = createSharedElementStackNavigator();
+const MarketFixed = () => (
+  <MarketStack.Navigator>
+    <MarketStack.Screen name="Market" component={Market} />
+  </MarketStack.Navigator>
+);
+
+export default MarketFixed;

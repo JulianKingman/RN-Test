@@ -8,8 +8,9 @@ import {
   StatusBar,
 } from 'react-native';
 import { SharedElement } from 'react-navigation-shared-element';
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import { useSafeArea } from 'react-native-safe-area-context';
+import CloseButton from '../components/CloseButton';
+import Price from '../components/Price';
+import { spacing, textStyles } from '../utility/universalStyles';
 
 const ProductDetail = ({
   route: {
@@ -17,49 +18,58 @@ const ProductDetail = ({
   },
   navigation: { goBack },
 }) => {
-  const { id, image, name, description } = product;
+  const {
+    id,
+    image,
+    name,
+    description,
+    price,
+    discount,
+    discount_type,
+  } = product;
   const { width } = Dimensions.get('window');
-  const { top: safeTopInset } = useSafeArea();
 
   return (
-    <ScrollView>
-      <StatusBar barStyle="light-content" />
-      <SharedElement id={`${id}-image`}>
-        <Image
-          source={{ uri: image }}
-          style={{ width, height: width * 0.618, marginBottom: 24 }}
-          resizeMode="cover"
-        />
-      </SharedElement>
-      <MaterialIcons
-        name="close"
-        size={22}
-        color="white"
-        style={{ position: 'absolute', top: safeTopInset, right: 12 }}
-        onPress={goBack}
-      />
-      <View style={{ paddingHorizontal: 12 }}>
-        <Text style={{ fontSize: 22, marginBottom: 12 }}>{name}</Text>
-        <View
-          style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-            marginBottom: 12,
-          }}>
+    <>
+      <ScrollView>
+        <StatusBar barStyle="light-content" />
+        <SharedElement id={`${id}-image`}>
           <Image
-            source={require('../../assets/DefaultAvatar.png')}
-            style={{
-              width: 36,
-              height: 36,
-              borderRadius: 36 / 2,
-              marginHorizontal: 12,
-            }}
+            source={{ uri: image }}
+            style={{ width, height: width * 0.618, marginBottom: spacing.lg }}
+            resizeMode="cover"
           />
-          <Text>by Jane Doe</Text>
+        </SharedElement>
+        <View style={{ paddingHorizontal: spacing.md }}>
+          <Text style={{ ...textStyles.title, marginBottom: spacing.md }}>
+            {name}
+          </Text>
+          <Price
+            {...{ price, discount_type, discount }}
+            style={{ ...textStyles.subtitle, marginBottom: spacing.md }}
+          />
+          <View
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              marginBottom: 12,
+            }}>
+            <Image
+              source={require('../../assets/DefaultAvatar.png')}
+              style={{
+                width: 36,
+                height: 36,
+                borderRadius: 36 / 2,
+                marginHorizontal: 12,
+              }}
+            />
+            <Text>by Jane Doe</Text>
+          </View>
+          <Text>{description}</Text>
         </View>
-        <Text>{description}</Text>
-      </View>
-    </ScrollView>
+      </ScrollView>
+      <CloseButton />
+    </>
   );
 };
 

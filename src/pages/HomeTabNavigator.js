@@ -3,7 +3,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Info from './Info';
 import Market from './Market';
-import ProductNavigator from './ProductNavigator';
+import Native from './Native';
 
 const HomeTabs = createBottomTabNavigator();
 
@@ -18,6 +18,8 @@ const Home = () => {
             iconName = 'info';
           } else if (route.name === 'Market') {
             iconName = 'shopping-cart';
+          } else if (route.name === 'Native') {
+            iconName = 'settings';
           }
 
           // You can return any component that you like here!
@@ -29,7 +31,8 @@ const Home = () => {
         inactiveTintColor: 'gray',
       }}>
       <HomeTabs.Screen name="Info" component={Info} />
-      <HomeTabs.Screen name="Market" component={ProductNavigator} />
+      <HomeTabs.Screen name="Market" component={Market} />
+      <HomeTabs.Screen name="Native" component={Native} />
     </HomeTabs.Navigator>
   );
 };
