@@ -39,6 +39,7 @@ const Market = () => {
       <FlatList
         contentContainerStyle={{
           paddingVertical: spacing.md,
+          paddingHorizontal: spacing.md,
         }}
         style={{ overflow: 'visible' }}
         data={_.orderBy(sectionData.data, 'order', 'asc')}
@@ -54,7 +55,10 @@ const Market = () => {
     <FlatList
       data={sections}
       style={{ overflow: 'visible' }}
-      contentContainerStyle={{ paddingTop, paddingBottom: spacing.md }}
+      contentContainerStyle={{
+        paddingTop,
+        paddingBottom: spacing.md,
+      }}
       keyExtractor={item => item.title}
       renderItem={renderSection}
     />

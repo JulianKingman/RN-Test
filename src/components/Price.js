@@ -22,7 +22,7 @@ const Price = ({ price, discount, discount_type, style = {} }) => {
           }}>
           {formatPrice(
             discount_type === 'percentage'
-              ? (discount * price) / 100
+              ? price - price * (discount / 100)
               : price - discount,
           )}
         </Text>
