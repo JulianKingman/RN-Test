@@ -1,20 +1,21 @@
-import React, { useState } from 'react';
-import { FlatList, TouchableOpacity, Text } from 'react-native';
+import React from 'react';
+import { FlatList, Text } from 'react-native';
 import { useSafeArea } from 'react-native-safe-area-context';
 import _ from 'lodash';
 import { useIsFocused } from '@react-navigation/native';
 
 import Product from '../components/Product';
-import { ScrollView } from 'react-native';
 import { spacing, textStyles } from '../utility/universalStyles';
 import { createSharedElementStackNavigator } from 'react-navigation-shared-element';
 
 const products = require('../../assets/products.json');
 
-const Market = ({ navigation }) => {
-  const { top: paddingTop, bottom: paddingBottom } = useSafeArea();
+const Market = () => {
+  // Focus refreshes visibility on iOS
   const focused = useIsFocused();
+  const { top: paddingTop } = useSafeArea();
 
+  // Format data for flatlist
   const sections = products.reduce((arr, product) => {
     const pIndex = arr.findIndex(p => p.title === product.category);
     if (pIndex < 0)
@@ -48,7 +49,6 @@ const Market = ({ navigation }) => {
       />
     </>
   );
-  console.log('render Market');
 
   return (
     <FlatList

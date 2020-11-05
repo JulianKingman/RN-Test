@@ -18,11 +18,6 @@ const ProductNavigator = () => (
     <SharedStack.Screen
       name="ProductDetail"
       component={ProductDetail}
-      options={{
-        cardStyleInterpolator: ({ current: { progress } }) => ({
-          cardStyle: { opacity: progress },
-        }),
-      }}
       sharedElements={({
         route: {
           params: {

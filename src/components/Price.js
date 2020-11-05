@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text } from 'react-native';
 
 import { formatPrice } from '../utility';
-import { spacing, textStyles } from '../utility/universalStyles';
+import { spacing } from '../utility/universalStyles';
 
 const Price = ({ price, discount, discount_type, style = {} }) => {
   return (

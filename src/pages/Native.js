@@ -6,9 +6,8 @@ import { spacing, textStyles } from '../utility/universalStyles';
 
 const Native = () => {
   const [key, setKey] = useState('...');
-  const serviceKey = NativeModules.ServiceKey.get().then(k => setKey(k));
+  NativeModules.ServiceKey.get().then(k => setKey(k));
   const { top: paddingTop } = useSafeArea();
-  console.log({ serviceKey });
   return (
     <View style={{ paddingTop, paddingHorizontal: spacing.md }}>
       <Text style={textStyles.title}>{`Service Key: ${key}`}</Text>

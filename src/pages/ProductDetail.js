@@ -16,7 +16,6 @@ const ProductDetail = ({
   route: {
     params: { product },
   },
-  navigation: { goBack },
 }) => {
   const {
     id,
@@ -52,7 +51,7 @@ const ProductDetail = ({
             style={{
               flexDirection: 'row',
               alignItems: 'center',
-              marginBottom: 12,
+              marginBottom: spacing.md,
             }}>
             <Image
               source={require('../../assets/DefaultAvatar.png')}
@@ -60,7 +59,7 @@ const ProductDetail = ({
                 width: 36,
                 height: 36,
                 borderRadius: 36 / 2,
-                marginHorizontal: 12,
+                marginHorizontal: spacing.md,
               }}
             />
             <Text>by Jane Doe</Text>

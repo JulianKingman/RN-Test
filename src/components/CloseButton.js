@@ -12,7 +12,7 @@ const CloseButton = () => {
   return (
     <MaterialIcons
       name="close"
-      style={[styles.icon, { top: safeTopInset }]}
+      style={[styles.icon, { top: safeTopInset + spacing.sm }]}
       onPress={goBack}
     />
   );
